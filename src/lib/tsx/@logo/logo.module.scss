@@ -1,0 +1,11 @@
+@use '../../scss/utils/media';
+
+.logo
+{
+    &:global(.\@s) { height: 40px; }
+    &:global(.\@l)
+    {
+        @include media.media_mobile             { height: 47px; }
+        @include media.media_mobile($not: true) { height: 68px; }
+    }
+}

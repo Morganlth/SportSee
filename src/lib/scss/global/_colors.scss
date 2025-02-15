@@ -1,0 +1,33 @@
+/* #||__[colors]__|| */
+
+
+/* #\_VARIABLES_\ */
+
+    /* __OUTSIDE */
+    $lgh0: #FFFFFF;
+    $lgh1: #F6F6F6;
+    $drk0: #000000;
+    $drk1: #0A0A0A;
+    $gry0: #E3E3E3;
+    $gry1: #C4C4C4;
+    $prm0: #FF6060;
+    $scd0: transparent;
+    $trt0: transparent;
+    $err0: transparent;
+    $scc0: transparent;
+
+    /* __THIS */
+    $colors_TO_EXPORT:
+    (
+        lgh0 $lgh0,
+        lgh1 $lgh1,
+        drk0 $drk0,
+        drk1 $drk1,
+        gry0 $gry0,
+        gry1 $gry1,
+        prm0 $prm0,
+        scd0 $scd0,
+        trt0 $trt0,
+        err0 $err0,
+        scc0 $scc0
+    );
