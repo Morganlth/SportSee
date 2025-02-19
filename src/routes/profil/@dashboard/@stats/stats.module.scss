@@ -1,0 +1,9 @@
+.stats
+{
+    grid-column: 4;
+    grid-row   : 1 / 3;
+
+    .icon { height: 20px; }
+
+    .value { margin-bottom: 4px; }
+}

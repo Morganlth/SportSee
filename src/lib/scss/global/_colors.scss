@@ -5,14 +5,21 @@
 
     /* __OUTSIDE */
     $lgh0: #FFFFFF;
-    $lgh1: #F6F6F6;
+    $lgh1: #FBFBFB;
     $drk0: #000000;
-    $drk1: #0A0A0A;
-    $gry0: #E3E3E3;
+    $drk1: #020203;
+    $drk2: #20253A;
+    $drk3: #282D30;
+    $gry0: #DEDEDE;
     $gry1: #C4C4C4;
-    $prm0: #FF6060;
-    $scd0: transparent;
-    $trt0: transparent;
+    $gry2: #9B9EAC;
+    $gry3: #74798C;
+    $prm0: #E60000;
+    $prm1: #FF0000;
+    $prm2: #FF0101;
+    $prm3: #FD5181;
+    $scd0: #4AB8FF;
+    $trt0: #FDCC0C;
     $err0: transparent;
     $scc0: transparent;
 
@@ -23,9 +30,16 @@
         lgh1 $lgh1,
         drk0 $drk0,
         drk1 $drk1,
+        drk2 $drk2,
+        drk3 $drk3,
         gry0 $gry0,
         gry1 $gry1,
+        gry2 $gry2,
+        gry3 $gry3,
         prm0 $prm0,
+        prm1 $prm1,
+        prm2 $prm2,
+        prm3 $prm3,
         scd0 $scd0,
         trt0 $trt0,
         err0 $err0,

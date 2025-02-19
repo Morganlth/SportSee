@@ -21,31 +21,39 @@
 /* #\_VARIABLES_\ */
 
     /* __OUTSIDE */
-    $g1 : 4px;
-    $g2 : 10px;
-    $g3 : 16px;
+    $g0 : 8px;
+    $g1 : 12px;
+    $g2 : 16px;
+    $g3 : 18px;
     $g4 : 20px;
-    $g5 : 30px;
-    $g6 : 40px;
-    $g7 : 50px;
-    $g8 : 60px;
-    $g9 : 75px;
-    $g10: 100px;
+    $g5 : 24px;
+    $g6 : 28px;
+    $g7 : 32px;
+    $g8 : 40px;
+    $g9 : 59px;
+    $g10: 68px;
+    $g11: 77px;
+    $g12: 90px;
+    $g13: 107px;
+    $g14: 150px;
 
-    $f0: 12px;
-    $f1: 14px;
-    $f2: 18px;
-    $f3: 24px;
-    $f4: 36px;
-    $f5: 48px;
-    $f6: 96px;
-    $f7: 288px;
+    $f0: 8px;
+    $f1: 12px;
+    $f2: 14px;
+    $f3: 15px;
+    $f4: 16px;
+    $f5: 18px;
+    $f6: 20px;
+    $f7: 24px;
+    $f8: 26px;
+    $f9: 48px;
 
     $scrollbar_SIZE: 9px;
 
     /* __THIS */
     $vars_GAPS:
     (
+        0  $g0,
         1  $g1,
         2  $g2,
         3  $g3,
@@ -55,7 +63,11 @@
         7  $g7,
         8  $g8,
         9  $g9,
-        10 $g10
+        10 $g10,
+        11 $g11,
+        12 $g12,
+        13 $g13,
+        14 $g14
     );
     $vars_FONTS:
     (
@@ -66,7 +78,9 @@
         4 $f4,
         5 $f5,
         6 $f6,
-        7 $f7
+        7 $f7,
+        8 $f8,
+        9 $f9
     );
     $vars_TO_EXPORT: vars_toExport(vars_toExport(
             (

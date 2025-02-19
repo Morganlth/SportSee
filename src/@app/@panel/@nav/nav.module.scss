@@ -1,0 +1,14 @@
+.nav
+{
+    grid-row: 2;
+
+    .route
+    {
+        $s: 64px;
+
+        width : $s;
+        height: $s;
+
+        .icon { height: 32px; }
+    }
+}

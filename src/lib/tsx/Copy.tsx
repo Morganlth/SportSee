@@ -1,18 +1,10 @@
-import { useContext } from 'react'
-
-import { SCREEN } from '../contexts/Screen'
-
-import STYLE from './@copy/copy.module.scss'
-
 export default function Copy()
 {
-    const MOBILE = useContext(SCREEN).mobile
-
     return (
         <small
-        className={`${STYLE.copy} super_txt_${MOBILE ? '0 @s t_ctr' : 3} c_lgh0`}
+        className="copy super_txt_1 t_r180 c_lgh0 fw_500 wm_vtl"
         >
-            &copy; 2020 Kasa. All rights reserved
+            Copiryght, SportSee 2020
         </small>
     )
 }

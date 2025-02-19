@@ -1,0 +1,16 @@
+
+
+.panel
+{
+    grid-template-columns: 1fr;
+    grid-template-rows   : 1fr auto 1fr;
+
+    min-height: 0;
+
+    &>footer
+    {
+        grid-row    : 3;
+        justify-self: center;
+        align-self  : flex-end;
+    }
+}
