@@ -1,4 +1,7 @@
+import { useContext } from 'react'
+
 import { USER_TYPE_PROFIL, USER_TYPE_ACTIVITY, USER_TYPE_AVERAGE_SESSIONS, USER_TYPE_PERFORMANCE } from '../../lib/contexts/User'
+import { SCREEN                                                                                  } from '../../lib/contexts/Screen'
 
 import Activity        from './@dashboard/Activity'
 import Stats           from './@dashboard/Stats'
@@ -10,22 +13,24 @@ import STYLES from './@dashboard/dashboard.module.scss'
 
 type DASHBOARD_PROPS =
 {
-    propProfil         : undefined|USER_TYPE_PROFIL,
-    propActivity       : undefined|USER_TYPE_ACTIVITY,
-    propAverageSessions: undefined|USER_TYPE_AVERAGE_SESSIONS,
-    propPerformance    : undefined|USER_TYPE_PERFORMANCE
+    propProfil         ?: USER_TYPE_PROFIL,
+    propActivity       ?: USER_TYPE_ACTIVITY,
+    propAverageSessions?: USER_TYPE_AVERAGE_SESSIONS,
+    propPerformance    ?: USER_TYPE_PERFORMANCE
 }
 
 
 export default function Dashboard({propProfil, propActivity, propAverageSessions, propPerformance}: DASHBOARD_PROPS)
 {
+    const TABLET = useContext(SCREEN).tablet
+
     return (
         <article
-        className={`${STYLES.dashboard} d_flx f_cl_ g_11 pt_10 pr_12 pb_12 pl_13 b_brd`}
+        className={`${STYLES.dashboard} d_flx f_cl_ ${TABLET ? 'g_9 pt_9 pr_9 pb_9 pl_10' : 'g_11 pt_10 pr_12 pb_12 pl_13'} b_brd`}
         >
             <header>
                 <h1
-                className="super_txt_9 mb_8 fw_500"
+                className={`super_txt_9 mb_${TABLET ? 6 : 8} fw_500 lh_1`}
                 >
                     Bonjour&nbsp;
                     
@@ -44,7 +49,7 @@ export default function Dashboard({propProfil, propActivity, propAverageSessions
             </header>
 
             <main
-            className={`${STYLES.grid} f_1 d_grd g_7`}
+            className={`${STYLES.grid} f_1 d_grd g_${TABLET ? 5 : 7}`}
             >
                 <Activity
                 propActivity={propActivity}

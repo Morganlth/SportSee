@@ -2,7 +2,9 @@ import { StrictMode }                   from 'react'
 import { createRoot }                   from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import User from './lib/contexts/User'
+import Screen from './lib/contexts/Screen'
+import Events from './lib/contexts/Events'
+import User   from './lib/contexts/User'
 
 import Header from './@app/Header'
 import Panel  from './@app/Panel'
@@ -22,27 +24,31 @@ const ROUTES: [path: string, Page: React.FC][] =
 createRoot(document.getElementById('APP')!).render(
     <StrictMode>
         <BrowserRouter>
-            <User
-            mocked={true}
-            >
-                <Header />
+            <Screen>
+                <Events>
+                    <User
+                    mocked={true}
+                    >
+                        <Header />
 
-                <Panel />
-                
-                <Main>
-                    <Routes>
-                    {
-                        ROUTES.map(([path, Page]) =>
-                            <Route
-                            key={path}
-                            path={path}
-                            element={<Page />}
-                            />
-                        )
-                    }
-                    </Routes>
-                </Main>
-            </User>
+                        <Panel />
+                        
+                        <Main>
+                            <Routes>
+                            {
+                                ROUTES.map(([path, Page]) =>
+                                    <Route
+                                    key={path}
+                                    path={path}
+                                    element={<Page />}
+                                    />
+                                )
+                            }
+                            </Routes>
+                        </Main>
+                    </User>
+                </Events>
+            </Screen>
         </BrowserRouter>
     </StrictMode>
 )

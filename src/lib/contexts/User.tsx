@@ -1,9 +1,5 @@
 import { createContext, Component } from 'react'
 
-console.warn('"USER" has been declared on the "window" global object.')
-
-declare global { interface Window { USER: User }}
-
 type USER_TYPE_PROPS =
 {
     children: React.ReactNode,
@@ -47,11 +43,12 @@ type USER_TYPE_PERFORMANCE =
     kind : string
 }[]
 
-type USER_TYPE_MIXED = USER_TYPE_PROFIL|USER_TYPE_ACTIVITY|USER_TYPE_AVERAGE_SESSIONS|USER_TYPE_PERFORMANCE
+type USER_TYPE_MIXED = USER_TYPE_PROFIL | USER_TYPE_ACTIVITY | USER_TYPE_AVERAGE_SESSIONS | USER_TYPE_PERFORMANCE
 
 export default class User extends Component<USER_TYPE_PROPS>
 {
     // #STATICS
+    static #__URL                                 = 'http://localhost:3000/user/'
     static #__DAYS                                = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
     static #__CACHE: Map<string, USER_TYPE_MIXED> = new Map()
 
@@ -67,8 +64,6 @@ export default class User extends Component<USER_TYPE_PROPS>
         super(props)
 
         if (props.mocked) this.#setMocks()
-
-        window.USER = this // TODO: debug only
     }
 
     // #RENDER
@@ -104,27 +99,36 @@ export default class User extends Component<USER_TYPE_PROPS>
     }
 
     // #GET
-    user_getProfil() { return this.#fetcher('profil') as Promise<USER_TYPE_PROFIL> }
+    user_getProfil() { return this.#fetcher('profil', User.#__URL + this.#id) as Promise<USER_TYPE_PROFIL> }
 
-    user_getActivity() { return this.#fetcher('activity', '/activity', User.#__builderActivityAndAverageSessions) as Promise<USER_TYPE_ACTIVITY> }
+    user_getActivity() { return this.#fetcher('activity', User.#__URL + this.#id + '/activity', User.#__builderActivity) as Promise<USER_TYPE_ACTIVITY> }
 
-    user_getAverageSessions() { return this.#fetcher('averageSessions', '/average-sessions', User.#__builderAverageSessions) as Promise<USER_TYPE_AVERAGE_SESSIONS> }
+    user_getAverageSessions() { return this.#fetcher('averageSessions', User.#__URL + this.#id + '/average-sessions', User.#__builderAverageSessions) as Promise<USER_TYPE_AVERAGE_SESSIONS> }
 
-    user_getPerformance() { return this.#fetcher('performance', '/performance', User.#__builderPerformance) as Promise<USER_TYPE_PERFORMANCE> }
+    user_getPerformance() { return this.#fetcher('performance', User.#__URL + this.#id + '/performance', User.#__builderPerformance) as Promise<USER_TYPE_PERFORMANCE> }
 
     // #BUILDER
-    static #__builderActivityAndAverageSessions(data: { [key: string]: unknown })
+    static #__builderActivity(data: { [key: string]: unknown })
     {
         const SESSIONS = data.sessions
 
         if (!SESSIONS || !(SESSIONS instanceof Array)) throw new Error('The "data" is not compliant.')
 
-        return SESSIONS as USER_TYPE_ACTIVITY|USER_TYPE_AVERAGE_SESSIONS
+        for (let i = 0, max = SESSIONS.length; i < max; i++)
+        {
+            const SESSION = SESSIONS[i]
+    
+            SESSION.day = SESSION.day.slice(-2).replace(/^0+/, '')
+        }
+
+        return SESSIONS as USER_TYPE_ACTIVITY
     }
 
     static #__builderAverageSessions(data: { [key: string]: unknown })
     {
-        const SESSIONS = User.#__builderActivityAndAverageSessions(data)
+        const SESSIONS = data.sessions
+
+        if (!SESSIONS || !(SESSIONS instanceof Array)) throw new Error('The "data" is not compliant.')
 
         for (let i = 0, max = SESSIONS.length; i < max; i++)
         {
@@ -142,7 +146,7 @@ export default class User extends Component<USER_TYPE_PROPS>
     {
         const
         KIND: any = data.kind,
-        DATA      = data.sessions
+        DATA      = data.data
 
         if (!KIND || !DATA || !(DATA instanceof Array)) throw new Error('The "data" is not compliant.')
         
@@ -157,170 +161,37 @@ export default class User extends Component<USER_TYPE_PROPS>
     }
 
     // #MOCKS
-    async #mockGetProfil()
-    {
-  await this.#mocker()
+    #mockGetProfil() { return this.#fetcher('profil', '/mock/' + this.#id + '.json') as Promise<USER_TYPE_PROFIL> }
 
-        return {
-            userInfos:
-            {
-                firstName: 'MockedKarl',
-                lastName : 'Dovineau',
-                age      : 31
-            },
-            todayScore: 0.12,
-            keyData   :
-            {
-                calorieCount     : 1930,
-                proteinCount     : 155,
-                carbohydrateCount: 290,
-                lipidCount       : 50
-            }
-        } as USER_TYPE_PROFIL
-    }
+    #mockGetActivity() { return this.#fetcher('activity', '/mock/' + this.#id + '/activity.json', User.#__builderActivity) as Promise<USER_TYPE_ACTIVITY> }
 
-    async #mockGetActivity()
-    {
-  await this.#mocker()
+    #mockGetAverageSessions() { return this.#fetcher('averageSessions', '/mock/' + this.#id + '/average-sessions.json', User.#__builderAverageSessions) as Promise<USER_TYPE_AVERAGE_SESSIONS> }
 
-        return [
-            {
-                day     : '2020-07-01',
-                kilogram: 80,
-                calories: 240
-            },
-            {
-                day     : '2020-07-02',
-                kilogram: 80,
-                calories: 220
-            },
-            {
-                day     : '2020-07-03',
-                kilogram: 81,
-                calories: 280
-            },
-            {
-                day     : '2020-07-04',
-                kilogram: 81,
-                calories: 290
-            },
-            {
-                day     : '2020-07-05',
-                kilogram: 80,
-                calories: 160
-            },
-            {
-                day     : '2020-07-06',
-                kilogram: 78,
-                calories: 162
-            },
-            {
-                day     : '2020-07-07',
-                kilogram: 76,
-                calories: 390
-            }
-        ] as USER_TYPE_ACTIVITY
-    }
-
-    async #mockGetAverageSessions()
-    {
-  await this.#mocker()
-
-        return [
-            {
-                day          : 'L',
-                sessionLength: 30
-            },
-            {
-                day          : 'M',
-                sessionLength: 23
-            },
-            {
-                day          : 'M',
-                sessionLength: 45
-            },
-            {
-                day          : 'J',
-                sessionLength: 50
-            },
-            {
-                day          : 'V',
-                sessionLength: 0
-            },
-            {
-                day          : 'S',
-                sessionLength: 0
-            },
-            {
-                day          : 'D',
-                sessionLength: 60
-            }
-        ] as USER_TYPE_AVERAGE_SESSIONS
-    }
-
-    async #mockGetPerformance()
-    {
-  await this.#mocker()
-
-        return [
-            {
-                value: 200,
-                kind : 'cardio'
-            },
-            {
-                value: 240,
-                kind : 'energy'
-            },
-            {
-                value: 80,
-                kind : 'endurance'
-            },
-            {
-                value: 80,
-                kind : 'strength'
-            },
-            {
-                value: 220,
-                kind : 'speed'
-            },
-            {
-                value: 110,
-                kind : 'intensity'
-            }
-        ] as USER_TYPE_PERFORMANCE
-    }
+    #mockGetPerformance() { return this.#fetcher('performance', '/mock/' + this.#id + '/performance.json', User.#__builderPerformance) as Promise<USER_TYPE_PERFORMANCE> }
 
     // #UTILS
-    async #fetcher(key = '', route = '', builder?: undefined|((data: { [key: string]: unknown }) => USER_TYPE_MIXED))
+    async #fetcher(key = '', url: string, builder?: ((data: { [key: string]: unknown }) => USER_TYPE_MIXED))
     {
-        let data: undefined|USER_TYPE_MIXED|{ [key: string]: unknown } = User.#__CACHE.get(key)
+        let data: undefined | USER_TYPE_MIXED | { [key: string]: unknown } = User.#__CACHE.get(key)
 
         if (data) return data as USER_TYPE_MIXED
 
         this.#controller = new AbortController()
 
-        data = (await (await fetch(`http://localhost:3000/user/${this.#id}${route}`, { signal: this.#controller.signal })).json())?.data as undefined|{ [key: string]: unknown }
+        data = (
+            await
+                (await fetch(url, { signal: this.#controller.signal }))
+            .json()
+        )?.data as undefined | { [key: string]: unknown }
 
         if (!data) throw new Error('Unable to retrieve user data.')
 
         delete data.id
         delete data.userId
 
-        User.#__CACHE.set(key, (builder ? builder(data) : data) as USER_TYPE_MIXED)
+        User.#__CACHE.set(key, (builder ? data = builder(data) : data) as USER_TYPE_MIXED)
     
         return data
-    }
-
-    async #mocker()
-    {
-        this.#controller = new AbortController()
-
-        await new Promise((res, rej) =>
-        {
-            setTimeout(res, 500) // *Delay simulation
-
-            this.#controller?.signal.addEventListener('abort', () => rej('Signal aborted.'))
-        })
     }
 
     user_abort() { this.#controller?.abort() }

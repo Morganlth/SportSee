@@ -2,4 +2,20 @@
 {
     grid-column: 1 / 4;
     grid-row   : 1;
+
+    .legend>li
+    {
+        &::before
+        {
+            $s: 8px;
+
+            @include constructor(c_void, d_ilb, mr_1, brd_r_50);
+
+            width : $s;
+            height: $s;
+        }
+
+        &:global(.\@drk3)::before { @extend %b_drk3; }
+        &:global(.\@prm0)::before { @extend %b_prm0; }
+    }
 }

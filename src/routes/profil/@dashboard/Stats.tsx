@@ -1,6 +1,7 @@
-import { cloneElement } from 'react'
+import { useContext, cloneElement } from 'react'
 
 import { USER_TYPE_PROFIL } from '../../../lib/contexts/User'
+import { SCREEN           } from '../../../lib/contexts/Screen'
 
 import COLORS, { color_rgba } from '../../../lib/ts/colors'
 
@@ -110,17 +111,19 @@ const STATS_ITEMS: STATS_ITEM[] =
     }
 ]
 
-export default function Stats({propStats}: {propStats: undefined|USER_TYPE_PROFIL['keyData']})
+export default function Stats({propStats}: {propStats?: USER_TYPE_PROFIL['keyData']})
 {
+    const TABLET = useContext(SCREEN).tablet
+
     return (
         <ul
-        className={`${STYLES.stats} d_flx f_cl_ j_sbt g_8`}
+        className={`${STYLES.stats} d_flx f_cl_ j_sbt g_${TABLET ? 6 : 8}`}
         >
         {
             STATS_ITEMS.map(({key, unit, type, color, icon}) =>
                 <li
                 key={key}
-                className="d_flx a_ctr g_5 pt_7 pr_9 pb_7 pl_7 b_brd b_lgh1"
+                className="d_flx a_ctr g_5 pt_7 pr_7 pb_7 pl_7 b_brd b_lgh1"
                 >
                     <div
                     className="wrapper pt_4 pr_4 pb_4 pl_4 b_brd brd_r_1"

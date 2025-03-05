@@ -41,6 +41,8 @@
         'brd_c_' border-color $colors_TO_EXPORT ' !important'
         ,
         'c_' color $colors_TO_EXPORT ''
+        ,
+        'lh_' line-height $vars_FONTS
     );
     $placeholders_PLACEHOLDERS:
     (
@@ -188,8 +190,9 @@
         'v_hid' visibility hidden,
 
         // OPACITY
-        'o_0' opacity 0,
-        'o_1' opacity 1,
+        'o_0'   opacity 0,
+        'o_50'  opacity .5,
+        'o_100' opacity 1,
 
         // BOX
         'b_brd' box-sizing border-box,
