@@ -40,7 +40,8 @@ type USER_TYPE_AVERAGE_SESSIONS =
 type USER_TYPE_PERFORMANCE =
 {
     value: number,
-    kind : string
+    kind : string,
+    order: number
 }[]
 
 type USER_TYPE_MIXED = USER_TYPE_PROFIL | USER_TYPE_ACTIVITY | USER_TYPE_AVERAGE_SESSIONS | USER_TYPE_PERFORMANCE
@@ -99,7 +100,7 @@ export default class User extends Component<USER_TYPE_PROPS>
     }
 
     // #GET
-    user_getProfil() { return this.#fetcher('profil', User.#__URL + this.#id, User.#__builderScore) as Promise<USER_TYPE_PROFIL> }
+    user_getProfil() { return this.#fetcher('profil', User.#__URL + this.#id, User.#__builderProfil) as Promise<USER_TYPE_PROFIL> }
 
     user_getActivity() { return this.#fetcher('activity', User.#__URL + this.#id + '/activity', User.#__builderActivity) as Promise<USER_TYPE_ACTIVITY> }
 
@@ -108,7 +109,7 @@ export default class User extends Component<USER_TYPE_PROPS>
     user_getPerformance() { return this.#fetcher('performance', User.#__URL + this.#id + '/performance', User.#__builderPerformance) as Promise<USER_TYPE_PERFORMANCE> }
 
     // #BUILDER
-    static #__builderScore(data: { [key: string]: unknown })
+    static #__builderProfil(data: { [key: string]: unknown })
     {
         if (data.todayScore)
         {
@@ -159,22 +160,29 @@ export default class User extends Component<USER_TYPE_PROPS>
     {
         const
         KIND: any = data.kind,
-        DATA      = data.data
+        DATA      = data.data,
+        ORDER     = ['intensity', 'speed', 'strength', 'endurance', 'energy', 'cardio']
 
         if (!KIND || !DATA || !(DATA instanceof Array)) throw new Error('The "data" is not compliant.')
         
         for (let i = 0, max = DATA.length; i < max; i++)
         {
-            const D = DATA[i]
+            const
+            D = DATA[i],
+            K = KIND[D.kind],
+            O = ORDER.indexOf(K)
 
-            D.kind = KIND[D.kind] ?? ''
+            if (!K || O === -1) throw new Error('The "data" is not compliant.')
+
+            D.kind  = K
+            D.order = O 
         }
 
-        return DATA as USER_TYPE_PERFORMANCE
+        return DATA.sort((a, b) => a.order - b.order) as USER_TYPE_PERFORMANCE
     }
 
     // #MOCKS
-    #mockGetProfil() { return this.#fetcher('profil', '/mock/' + this.#id + '.json', User.#__builderScore) as Promise<USER_TYPE_PROFIL> }
+    #mockGetProfil() { return this.#fetcher('profil', '/mock/' + this.#id + '.json', User.#__builderProfil) as Promise<USER_TYPE_PROFIL> }
 
     #mockGetActivity() { return this.#fetcher('activity', '/mock/' + this.#id + '/activity.json', User.#__builderActivity) as Promise<USER_TYPE_ACTIVITY> }
 

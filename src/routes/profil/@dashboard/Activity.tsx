@@ -9,12 +9,14 @@ import STYLES from './@activity/activity.module.scss'
 const ACTIVITY_DATA =
 [
     {
+        yID   : 0,
         key   : 'kilogram',
         legend: 'Poids',
         unit  : 'kg',
         color : 'drk3'
     },
     {
+        yID   : 1,
         key   : 'calories',
         legend: 'Calories brûlées',
         unit  : 'kCal',
@@ -77,15 +79,26 @@ export default function Activity({propActivity}: {propActivity?: USER_TYPE_ACTIV
                         dataKey="day"
                         axisLine={false}
                         tickLine={false}
-                        tickMargin={15}
+                        tickMargin={13}
                         />
                 
                         <YAxis
+                        yAxisId={0}
                         className="super_txt_2 c_gry2"
+                        dataKey="kilogram"
                         axisLine={false}
                         tickLine={false}
+                        tickCount={3}
+                        domain={['dataMin - 2', 'dataMax + 1']}
                         tickMargin={38}
                         orientation="right"
+                        />
+
+                        <YAxis
+                        yAxisId={1}
+                        dataKey="calories"
+                        hide={true}
+                        domain={[0, 'dataMax + 30']}
                         />
 
                         <Tooltip
@@ -111,10 +124,11 @@ export default function Activity({propActivity}: {propActivity?: USER_TYPE_ACTIV
                         />
                     
                     {
-                        ACTIVITY_DATA.map(({key, unit, color}) =>
+                        ACTIVITY_DATA.map(({yID, key, unit, color}) =>
                             <Bar
                             key={key}
                             dataKey={key}
+                            yAxisId={yID}
                             fill={COLORS[color]}
                             barSize={7}
                             radius={[3, 3, 0, 0]}
