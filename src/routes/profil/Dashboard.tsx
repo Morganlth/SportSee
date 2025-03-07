@@ -68,7 +68,7 @@ export default function Dashboard({propProfil, propActivity, propAverageSessions
                 />
 
                 <Score
-                propScore={propProfil?.todayScore}
+                propScore={propProfil?.score}
                 />
             </main>
         </article>

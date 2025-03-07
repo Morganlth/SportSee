@@ -14,8 +14,8 @@ type USER_TYPE_PROFIL =
         lastName : string,
         age      : number
     },
-    todayScore: number,
-    keyData   :
+    score  : number,
+    keyData:
     {
         calorieCount     : number,
         proteinCount     : number,
@@ -99,7 +99,7 @@ export default class User extends Component<USER_TYPE_PROPS>
     }
 
     // #GET
-    user_getProfil() { return this.#fetcher('profil', User.#__URL + this.#id) as Promise<USER_TYPE_PROFIL> }
+    user_getProfil() { return this.#fetcher('profil', User.#__URL + this.#id, User.#__builderScore) as Promise<USER_TYPE_PROFIL> }
 
     user_getActivity() { return this.#fetcher('activity', User.#__URL + this.#id + '/activity', User.#__builderActivity) as Promise<USER_TYPE_ACTIVITY> }
 
@@ -108,6 +108,19 @@ export default class User extends Component<USER_TYPE_PROPS>
     user_getPerformance() { return this.#fetcher('performance', User.#__URL + this.#id + '/performance', User.#__builderPerformance) as Promise<USER_TYPE_PERFORMANCE> }
 
     // #BUILDER
+    static #__builderScore(data: { [key: string]: unknown })
+    {
+        if (data.todayScore)
+        {
+            data.score = data.todayScore
+
+            delete data.todayScore
+        }
+        else if (!data.score) data.score = 0
+
+        return data as USER_TYPE_PROFIL
+    }
+
     static #__builderActivity(data: { [key: string]: unknown })
     {
         const SESSIONS = data.sessions
@@ -161,7 +174,7 @@ export default class User extends Component<USER_TYPE_PROPS>
     }
 
     // #MOCKS
-    #mockGetProfil() { return this.#fetcher('profil', '/mock/' + this.#id + '.json') as Promise<USER_TYPE_PROFIL> }
+    #mockGetProfil() { return this.#fetcher('profil', '/mock/' + this.#id + '.json', User.#__builderScore) as Promise<USER_TYPE_PROFIL> }
 
     #mockGetActivity() { return this.#fetcher('activity', '/mock/' + this.#id + '/activity.json', User.#__builderActivity) as Promise<USER_TYPE_ACTIVITY> }
 
