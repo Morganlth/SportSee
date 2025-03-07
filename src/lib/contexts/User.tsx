@@ -56,7 +56,7 @@ export default class User extends Component<USER_TYPE_PROPS>
 
     // #PRIVATES
     #id = '0'
-    #controller: undefined|AbortController
+    #controller: undefined | AbortController
 
     // #CONSTRUCTOR
     constructor(props: USER_TYPE_PROPS)
